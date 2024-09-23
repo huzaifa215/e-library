@@ -35,8 +35,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('change-password', [dashboardController::class, 'change_password_view'])->name('change_password_view');
     Route::post('change-password', [dashboardController::class, 'change_password'])->name('change_password');
-    Route::get('/dashboard', [dashboardController::class, 'index'])->name('dashboard');
     Route::middleware('can:admin')->group(function () {
+        Route::get('/dashboard', [dashboardController::class, 'index'])->name('dashboard');
 
         // author CRUD
         Route::get('/authors', [AutherController::class, 'index'])->name('authors');

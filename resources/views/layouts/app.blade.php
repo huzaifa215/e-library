@@ -46,8 +46,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <ul class="menu">
-                        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         @can('admin')
+                            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li><a href="{{ route('authors') }}">Authors</a></li>
                             <li><a href="{{ route('publishers') }}">Publishers</a></li>
                             <li><a href="{{ route('categories') }}">Categories</a></li>

@@ -17,6 +17,9 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+            if (auth()->user()->isStudent()) {
+                return redirect('/books');
+            }
             return redirect('/dashboard');
         } else {
             return redirect()->back()->withErrors(['username' => 'Invalid username or password']);
