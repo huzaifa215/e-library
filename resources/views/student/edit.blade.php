@@ -15,7 +15,7 @@
                         <div class="form-group">
                             <label>Student Name</label>
                             <input type="text" class="form-control" placeholder="Student Name" name="name"
-                                value="{{ $student->name }}" required>
+                                value="{{ $student->user->name }}" required>
                             @error('name')
                                 <div class="alert alert-danger" role="alert">
                                     {{ $message }}

@@ -28,6 +28,7 @@ class StorebookRequest extends FormRequest
             'category_id' => 'required',
             'auther_id' => 'required',
             'publisher_id' => 'required',
+            'book_pdf' => 'required|mimes:pdf'
         ];
     }
 }

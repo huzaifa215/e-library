@@ -14,7 +14,7 @@
                         <table cellpadding="10px" width="90%" style="margin: 0 0 20px;">
                             <tr>
                                 <td>StudentName: </td>
-                                <td><b>{{ $book->student->name }}</b></td>
+                                <td><b>{{ $book->student->user->name }}</b></td>
                             </tr>
                             <tr>
                                 <td>Book Name : </td>

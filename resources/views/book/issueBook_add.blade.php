@@ -20,7 +20,7 @@
                             <select class="form-control" name="student_id" required>
                                 <option value="">Select Name</option>
                                 @foreach ($students as $student)
-                                    <option value='{{ $student->id }}'>{{ $student->name }}</option>
+                                    <option value='{{ $student->id }}'>{{ $student->user->name }}</option>
                                 @endforeach
                             </select>
                             @error('student_id')

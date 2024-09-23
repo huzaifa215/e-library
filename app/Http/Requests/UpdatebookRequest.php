@@ -28,6 +28,7 @@ class UpdatebookRequest extends FormRequest
             'category_id' => 'required',
             'author_id' => 'required',
             'publisher_id' => 'required',
+            'book_pdf' => 'nullable|mimes:pdf'
         ];
     }
 }

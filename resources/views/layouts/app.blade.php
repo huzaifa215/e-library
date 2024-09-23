@@ -29,7 +29,8 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="{{ route('change_password') }}">Change Password</a>
-                            <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit()">Log Out</a>
+                            <a class="dropdown-item" href="#"
+                                onclick="document.getElementById('logoutForm').submit()">Log Out</a>
                         </div>
                         <form method="post" id="logoutForm" action="{{ route('logout') }}">
                             @csrf
@@ -46,14 +47,18 @@
                 <div class="col-md-12">
                     <ul class="menu">
                         <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li><a href="{{ route('authors') }}">Authors</a></li>
-                        <li><a href="{{ route('publishers') }}">Publishers</a></li>
-                        <li><a href="{{ route('categories') }}">Categories</a></li>
+                        @can('admin')
+                            <li><a href="{{ route('authors') }}">Authors</a></li>
+                            <li><a href="{{ route('publishers') }}">Publishers</a></li>
+                            <li><a href="{{ route('categories') }}">Categories</a></li>
+                        @endcan
                         <li><a href="{{ route('books') }}">Books</a></li>
-                        <li><a href="{{ route('students') }}">Reg Students</a></li>
-                        <li><a href="{{ route('book_issued') }}">Book Issue</a></li>
-                        <li><a href="{{ route('reports') }}">Reports</a></li>
-                        <li><a href="{{ route('settings') }}">Settings</a></li>
+                        @can('admin')
+                            <li><a href="{{ route('students') }}">Reg Students</a></li>
+                            <li><a href="{{ route('book_issued') }}">Book Issue</a></li>
+                            <li><a href="{{ route('reports') }}">Reports</a></li>
+                            <li><a href="{{ route('settings') }}">Settings</a></li>
+                        @endcan
                     </ul>
                 </div>
             </div>
@@ -64,9 +69,9 @@
 
     <!-- FOOTER -->
     <!-- <div id="footer">
-        <div class="container">
-        </div>
-    </div> -->
+    <div class="container">
+    </div>
+</div> -->
     <!-- /FOOTER -->
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('js/popper.min.js') }}"></script>

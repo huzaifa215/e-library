@@ -15,7 +15,7 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
             $table->string('age');
             $table->string('gender');
             $table->string('email');

@@ -12,7 +12,8 @@
             </div>
             <div class="row">
                 <div class="offset-md-3 col-md-6">
-                    <form class="yourform" action="{{ route('book.store') }}" method="post" autocomplete="off">
+                    <form class="yourform" action="{{ route('book.store') }}" method="post" 
+                    enctype="multipart/form-data" autocomplete="off">
                         @csrf
                         <div class="form-group">
                             <label>Book Name</label>
@@ -26,7 +27,8 @@
                         </div>
                         <div class="form-group">
                             <label>Category</label>
-                            <select class="form-control @error('category_id') isinvalid @enderror " name="category_id" required>
+                            <select class="form-control @error('category_id') isinvalid @enderror " name="category_id"
+                                required>
                                 <option value="">Select Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -54,7 +56,8 @@
                         </div>
                         <div class="form-group">
                             <label>Publisher</label>
-                            <select class="form-control @error('publisher_id') isinvalid @enderror " name="publisher_id" required>
+                            <select class="form-control @error('publisher_id') isinvalid @enderror " name="publisher_id"
+                                required>
                                 <option value="">Select Publisher</option>
                                 @foreach ($publishers as $publisher)
                                     <option value='{{ $publisher->id }}'>{{ $publisher->name }}</option>";
@@ -66,11 +69,20 @@
                                 </div>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="book_pdf">Upload Book PDF</label>
+                            <input type="file" class="form-control  @error('book_pdf') is-invalid @enderror"
+                                name="book_pdf" id="book_pdf" accept=".pdf"  >
+                            @error('book_pdf')
+                                <div class="alert alert-danger" role="alert">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                         <input type="submit" name="save" class="btn btn-danger" value="save" required>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
 @endsection

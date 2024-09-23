@@ -17,6 +17,7 @@
                         <thead>
                             <th>S.No</th>
                             <th>Student Name</th>
+                            <th>userame</th>
                             <th>Gender</th>
                             <th>Phone</th>
                             <th>Email</th>
@@ -28,16 +29,17 @@
                             @forelse ($students as $student)
                                 <tr>
                                     <td class="id">{{ $student->id }}</td>
-                                    <td>{{ $student->name }}</td>
+                                    <td>{{ $student->user->name }}</td>
+                                    <td>{{ $student->user->username }}</td>
                                     <td class="text-capitalize">{{ $student->gender }}</td>
                                     <td>{{ $student->phone }}</td>
                                     <td>{{ $student->email }}</td>
                                     <td class="view">
-                                        <button data-sid='{{ $student->id }}>'
+                                        <button data-sid='{{ $student->id }}'
                                             class="btn btn-primary view-btn">View</button>
                                     </td>
                                     <td class="edit">
-                                        <a href="{{ route('student.edit', $student) }}>" class="btn btn-success">Edit</a>
+                                        <a href="{{ route('student.edit', $student) }}" class="btn btn-success">Edit</a>
                                     </td>
                                     <td class="delete">
                                         <form action="{{ route('student.destroy', $student->id) }}" method="post"
@@ -73,12 +75,19 @@
         $(".view-btn").on("click", function() {
             var student_id = $(this).data("sid");
             $.ajax({
-                url: "http://127.0.0.1:8000/student/show/"+student_id,
+                url: "http://127.0.0.1:8000/student/show/" + student_id,
                 type: "get",
                 success: function(student) {
                     console.log(student);
-                    form ="<tr><td>Student Name :</td><td><b>"+student['name']+"</b></td></tr><tr><td>Address :</td><td><b>"+student['address']+"</b></td></tr><tr><td>Gender :</td><td><b>"+ student['gender']+ "</b></td></tr><tr><td>Class :</td><td><b>"+ student['class']+ "</b></td></tr><tr><td>Age :</td><td><b>"+ student['age']+ "</b></td></tr><tr><td>Phone :</td><td><b>"+ student['phone']+ "</b></td></tr><tr><td>Email :</td><td><b>"+ student['email']+ "</b></td></tr>";
-          console.log(form);
+                    form = "<tr><td>Student Name :</td><td><b>" + student['name'] +
+                        "</b></td></tr><tr><td>Address :</td><td><b>" + student['address'] +
+                        "</b></td></tr><tr><td>Gender :</td><td><b>" + student['gender'] +
+                        "</b></td></tr><tr><td>Class :</td><td><b>" + student['class'] +
+                        "</b></td></tr><tr><td>Age :</td><td><b>" + student['age'] +
+                        "</b></td></tr><tr><td>Phone :</td><td><b>" + student['phone'] +
+                        "</b></td></tr><tr><td>Email :</td><td><b>" + student['email'] +
+                        "</b></td></tr>";
+                    console.log(form);
 
                     $("#modal-form table").html(form);
                     $("#modal").show();

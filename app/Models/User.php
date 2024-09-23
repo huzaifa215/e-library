@@ -19,7 +19,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'password',
+        'role',
     ];
 
     /**
@@ -31,4 +33,32 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isStudent()
+    {
+        return $this->role === 'student';
+    }
+
+    public function student()
+    {
+        return $this->hasOne(student::class, 'student_id');
+    }
+
+    public static function generateUsername($name)
+    {
+        $username =  strtolower(str_replace(' ', '_', $name));
+        $count = 0;
+        do {
+            $exists = User::where('username', $username)->exists();
+            if ($exists) {
+                $username = $username . $count;
+                $count++;
+            }
+        } while ($exists);
+        return $username;
+    }
 }

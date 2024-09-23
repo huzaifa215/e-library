@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class studentFactory extends Factory
@@ -13,11 +14,11 @@ class studentFactory extends Factory
      */
     public function definition()
     {
-        $gender=['male','female'];
+        $gender = ['male', 'female'];
         return [
-            'name' => $this->faker->name,
-            'age' => random_int(18,80),
-            'gender' => $gender[random_int(0,1)],
+            'student_id' => User::factory()->create()->id,
+            'age' => random_int(18, 80),
+            'gender' => $gender[random_int(0, 1)],
             'email' => $this->faker->safeEmail,
             'phone' => $this->faker->phoneNumber,
             'address' => $this->faker->address,

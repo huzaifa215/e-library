@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\student;
 use App\Http\Requests\StorestudentRequest;
 use App\Http\Requests\UpdatestudentRequest;
+use App\Models\User;
 
 class StudentController extends Controller
 {
@@ -16,7 +17,7 @@ class StudentController extends Controller
     public function index()
     {
         return view('student.index', [
-            'students' => student::Paginate(5)
+            'students' => student::with('user')->latest()->paginate(5)
         ]);
     }
 
@@ -38,7 +39,23 @@ class StudentController extends Controller
      */
     public function store(StorestudentRequest $request)
     {
-        student::create($request->validated());
+        $username = User::generateUsername($request->name);
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $username,
+            'password' => bcrypt("password"),
+            'role' => 'student'
+        ]);
+
+        student::create([
+            'student_id' => $user->id,
+            'address' => $request->name,
+            'gender' => $request->name,
+            'class' => $request->name,
+            'age' => $request->name,
+            'phone' => $request->name,
+            'email' => "required|email",
+        ]);
 
         return redirect()->route('students');
     }
@@ -77,7 +94,6 @@ class StudentController extends Controller
     public function update(UpdatestudentRequest $request, $id)
     {
         $student = student::find($id);
-        $student->name = $request->name;
         $student->address = $request->address;
         $student->gender = $request->gender;
         $student->class = $request->class;
@@ -85,6 +101,9 @@ class StudentController extends Controller
         $student->phone = $request->phone;
         $student->email = $request->email;
         $student->save();
+
+        $student->user->name = $request->name;
+        $student->user->save();
 
         return redirect()->route('students');
     }
@@ -97,7 +116,9 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        student::find($id)->delete();
+
+        $student = student::find($id);
+        $student->user->delete();
         return redirect()->route('students');
     }
 }

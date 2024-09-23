@@ -48,6 +48,7 @@ class LoginController extends Controller
             'password' => 'required|confirmed',
         ]);
 
+        /** @var User $user */
         $user = Auth::user();
 
         if (password_verify($request->c_password, $user->password)) {
