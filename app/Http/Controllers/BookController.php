@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Smalot\PdfParser\Parser;
 use App\Models\book;
 use App\Http\Requests\StorebookRequest;
 use App\Http\Requests\UpdatebookRequest;
@@ -63,16 +65,86 @@ class BookController extends Controller
     {
         $path = $request->file('book_pdf')->store('books', 'public');
 
-        book::create([
+        // book::create([
+        //     'name' => $request->name,
+        //     'category_id' => $request->category_id,
+        //     'auther_id' => $request->auther_id,
+        //     'publisher_id' => $request->publisher_id,
+        //     'status' => 'Y',
+        //     'pdf_path' => $path
+        // ]);
+        $fullPath = storage_path('app/public/' . $path);
+
+        // Initialize the PDF parser
+        $parser = new Parser();
+
+        // Parse the PDF file and extract text
+        try {
+            $pdf = $parser->parseFile($fullPath);
+            $text = $pdf->getText();
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to extract text from the PDF');
+        }
+
+        // Generate a summary of the extracted text
+        // Option 1: Basic summarization (first 500 characters)
+        $summary = substr($text, 0, 500) . '...';
+       // $summary = $this->summarizeText($text);
+        info('mymessage: ' . $summary);
+          book::create([
             'name' => $request->name,
             'category_id' => $request->category_id,
             'auther_id' => $request->auther_id,
             'publisher_id' => $request->publisher_id,
             'status' => 'Y',
-            'pdf_path' => $path
+            'pdf_path' => $path,
+            'summary' => $summary 
         ]);
-
         return redirect()->route('books');
+    }
+
+    // generate the summary from the open AI
+    public function summarizeText($text)
+    {
+        $client = new Client();
+    
+      try {
+            // Retrieve the OpenAI API key from the environment file
+            $apiKey = env('OPENAI_API_KEY');
+    
+            // Make an API call to OpenAI to summarize the text using the updated model
+            $response = $client->post('https://api.openai.com/v1/chat/completions', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey, // Use the API key from .env
+                    'Content-Type'  => 'application/json',
+                ],
+                'json' => [
+                    'model' => 'gpt-3.5-turbo', // Use the latest model (or 'gpt-4' if you have access)
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a summarizer. Summarize the following text.',
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $text, // The text to summarize
+                        ],
+                    ],
+                    'max_tokens' => 100,  // Adjust the token size as needed
+                    'temperature' => 0.5, // Control randomness
+                ],
+                'verify' => false // Disable SSL certificate verification (if necessary for local dev)
+            ]);
+    
+            // Decode the response body to get the summary
+            $responseBody = json_decode($response->getBody()->getContents(), true);
+            $summary = $responseBody['choices'][0]['message']['content'] ?? 'Summary not available';
+    
+            return $summary;
+        } catch (RequestException $e) {
+            // Handle any API request exceptions
+            return 'Failed to summarize: ' . $e->getMessage();
+        }
     }
 
 

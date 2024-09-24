@@ -12,7 +12,7 @@
                     @endcan
                 </div>
             </div>
-
+            <h4>Seacrh Book: Author , Publisher , Category and Book Name</h4>
             <div class="form-group">
                 <form action="{{ route('books') }}">
                     <div class="d-flex col-md-8 ">
@@ -32,6 +32,7 @@
                             <th>Category</th>
                             <th>Author</th>
                             <th>Publisher</th>
+                            <th>Summary</th>
                             <th>Status</th>
                             <th>View</th>
                             @can('admin')
@@ -47,6 +48,7 @@
                                     <td>{{ $book->category->name }}</td>
                                     <td>{{ $book->auther->name }}</td>
                                     <td>{{ $book->publisher->name }}</td>
+                                    <td>{{ $book->summary }}</td>
                                     <td>
                                         @if ($book->status == 'Y')
                                             <span class='badge badge-success'>Available</span>
